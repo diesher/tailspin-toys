@@ -27,6 +27,9 @@ npm ci
 npx playwright install chromium   # only needed to run the E2E tests
 ```
 
+> [!NOTE]
+> On Windows ARM64, the project auto-detects and uses an installed **x64 Node.js** runtime for DB and Astro CLI scripts (via `run-node-tool.mjs`) because the current `libsql` native package does not ship a Windows ARM64 binary. Install Node.js x64 (for example `winget install --id OpenJS.NodeJS.LTS --architecture x64 --scope user`) if you see `Cannot find module '@libsql/win32-arm64-msvc'`.
+
 ## Launch the site
 
 ```bash
