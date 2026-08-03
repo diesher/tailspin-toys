@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { eq } from 'drizzle-orm';
 import { createDatabase, type Database } from '../src/lib/db';
 import { categories, games, publishers } from './schema';
@@ -73,7 +73,9 @@ export async function seedDatabase(db: Database, csvPath: string = join(here, 'g
 }
 
 // Allow running directly: `tsx db/seed.ts`
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Use path comparison instead of URL string comparison so it works on Windows
+// (import.meta.url uses forward-slash file:/// URLs while process.argv[1] has backslashes).
+if (process.argv[1] && resolve(fileURLToPath(import.meta.url)) === resolve(process.argv[1])) {
     const db = createDatabase();
     seedDatabase(db)
         .then(() => {
